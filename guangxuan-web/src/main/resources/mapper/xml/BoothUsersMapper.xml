@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.BoothUsersMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.BoothUsers">
+        <id column="id" property="id"/>
+        <result column="booth_id" property="boothId"/>
+        <result column="user_id" property="userId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="expire_time" property="expireTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, booth_id, user_id, status, create_time, expire_time
+    </sql>
+    <update id="updateExpire">
+        update booth_users set status = 2 where booth_id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{boothIds}
+        </foreach>
+    </update>
+
+</mapper>

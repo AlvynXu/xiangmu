@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MarketOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.MarketOrder">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+        <result column="type" property="type" />
+        <result column="total_count" property="totalCount" />
+        <result column="sold_count" property="soldCount" />
+        <result column="city_code" property="cityCode" />
+        <result column="expire_date" property="expireDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, create_time, type, total_count, sold_count, city_code, expire_date
+    </sql>
+
+</mapper>

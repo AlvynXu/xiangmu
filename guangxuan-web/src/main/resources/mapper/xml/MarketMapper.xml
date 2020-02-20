@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MarketMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Market">
+        <id column="id" property="id"/>
+        <result column="price" property="price"/>
+        <result column="days" property="days"/>
+        <result column="rent_end_time" property="rentEndTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="booth_id" property="boothId"/>
+        <result column="rate" property="rate"/>
+        <result column="number" property="number"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="rent_user_id" property="rentUserId"/>
+        <result column="markert_end_time" property="markertEndTime"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, price, days, rent_end_time, user_id, booth_id, rate, number, area_code, rent_user_id, markert_end_time,type,status
+    </sql>
+    <select id="getMyCityMarket" resultType="com.guangxuan.dto.MarketDTO">
+        select count(1) totalCount,market.price,market.days,market.status
+        from market market
+        left join street s on market.area_code = s.code
+        left join area d on s.area_code = d.code
+        left join area c on c.code = d.parent_code
+        where c.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="userId!=null">
+            and market.user_id =#{userId}
+        </if>
+        group by market.price,market.days,market.status
+        order by market.price
+    </select>
+    <select id="getMyDistrictMarket" resultType="com.guangxuan.dto.MarketDTO">
+        select count(1) totalCount,market.price,market.days,market.status
+        from market market
+        left join street s on market.area_code = s.code
+        left join area d on s.area_code = d.code
+        where d.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="userId!=null">
+            and market.user_id =#{userId}
+        </if>
+        group by market.price,market.days,market.status
+        order by market.price
+    </select>
+
+    <select id="getMyStreetMarket" resultType="com.guangxuan.dto.MarketDTO">
+        select count(1) totalCount,market.price,market.days,market.status
+        from market market
+        left join street s on market.area_code = s.code
+        where s.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="userId!=null">
+            and market.user_id =#{userId}
+        </if>
+        group by market.price,market.days,market.status
+        order by market.price
+    </select>
+
+
+    <select id="getMyCityMarketPage" resultType="com.guangxuan.dto.MarketDTO">
+        select a.totalCount totalCount, ifnull(b.totalCount,0) soldCount,a.price ,a.days from
+        (select count(1) totalCount,market.price,market.days,market.status,s.area_code,s.area_code areaCode
+        from market market
+        left join street s on market.area_code = s.code
+        left join area d on s.area_code = d.code
+        left join area c on c.code = d.parent_code
+        where c.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by market.price,market.days, s.area_code) a
+
+        left join (select count(1) totalCount,market.price,market.days,market.status,s.area_code areaCode
+        from market market
+        left join street s on market.area_code = s.code
+        left join area d on s.area_code = d.code
+        left join area c on c.code = d.parent_code
+        where c.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="soldStatus" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by market.price,market.days, market.area_code) b
+        on a.areaCode = b.areaCode and a.days = b.days and a.price=b.price
+        order by a.price
+    </select>
+    <select id="getMyDistrictMarketPage" resultType="com.guangxuan.dto.MarketDTO">
+        select a.totalCount totalCount, ifnull(b.totalCount,0) soldCount,a.price ,a.days from
+        (select count(1) totalCount,market.price,market.days,market.status,s.area_code,s.area_code areaCode
+        from market market
+        left join street s on market.area_code = s.code
+        left join area d on s.area_code = d.code
+        where d.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by market.price,market.days, s.area_code) a
+
+        left join (select count(1) totalCount,market.price,market.days,market.status,s.area_code areaCode
+        from market market
+        left join street s on market.area_code = s.code
+        left join area d on s.area_code = d.code
+        where d.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="soldStatus" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by market.price,market.days, market.area_code) b
+        on a.areaCode = b.areaCode and a.days = b.days and a.price=b.price
+        order by a.price
+    </select>
+
+    <select id="getMyStreetMarketPage" resultType="com.guangxuan.dto.MarketDTO">
+        select a.totalCount totalCount, ifnull(b.totalCount,0) soldCount,a.price ,a.days from
+        (select count(1) totalCount,market.price,market.days,market.status,s.area_code,s.area_code areaCode
+        from market market
+        left join street s on market.area_code = s.code
+        where s.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by market.price,market.days, s.area_code) a
+
+        left join (select count(1) totalCount,market.price,market.days,market.status,s.area_code areaCode
+        from market market
+        left join street s on market.area_code = s.code
+        where s.code = #{areaCode}
+        and market.type = #{type}
+        and market.status in
+        <foreach collection="soldStatus" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        group by market.price,market.days, market.area_code) b
+        on a.areaCode = b.areaCode and a.days = b.days and a.price=b.price
+        order by a.price
+    </select>
+    <select id="getCityMarket" resultType="com.guangxuan.model.Market">
+        select m.*
+        from market m
+                 left join street s on m.area_code = s.code
+                 left join area d on d.code = s.area_code
+                 left join area c on c.code = d.parent_code
+        where m.price = #{price}
+          and m.days = #{days}
+          and m.type = #{type}
+          and m.status = #{status}
+          and c.code = #{areaCode}
+    </select>
+    <select id="getDistrictMarket" resultType="com.guangxuan.model.Market">
+        select m.*
+        from market m
+                 left join street s on m.area_code = s.code
+                 left join area d on d.code = s.area_code
+        where m.price = #{price}
+          and m.days = #{days}
+          and m.type = #{type}
+          and m.status = #{status}
+          and d.code = #{areaCode}
+    </select>
+    <select id="getStreetMarket" resultType="com.guangxuan.model.Market">
+        select m.*
+        from market m
+                 left join street s on m.area_code = s.code
+        where m.price = #{price}
+          and m.days = #{days}
+          and m.type = #{type}
+          and m.status = #{status}
+          and s.code = #{areaCode}
+    </select>
+    <select id="getUserStreetDTO" resultType="com.guangxuan.dto.UserStreetDTO">
+        select c.name cityName, d.name districtName, s.name streetName, s.code streetCode, m.days days
+        from market_order mo
+                 left join market m on mo.id = m.order_id
+                 left join street s on m.area_code = s.code
+                 left join area d on s.area_code = d.code
+                 left join area c on c.code = d.parent_code
+                 left join booth b on b.street_id = s.id
+                 left join booth_users bu on b.id = bu.booth_id
+        where bu.user_id = #{userId}
+          and bu.status = 1
+          and mo.id = #{orderId}
+          and mo.pay_status = 1
+          and b.use_status = 1
+          and m.status = 0
+        GROUP BY s.id
+    </select>
+
+</mapper>

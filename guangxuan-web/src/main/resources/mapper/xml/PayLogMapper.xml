@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.PayLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.PayLog">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="source" property="source" />
+        <result column="pay_type" property="payType" />
+        <result column="amount" property="amount" />
+        <result column="fee" property="fee" />
+        <result column="real_amount" property="realAmount" />
+        <result column="extend1" property="extend1" />
+        <result column="extend2" property="extend2" />
+        <result column="extend3" property="extend3" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, source, pay_type, amount, fee, real_amount, extend1, extend2, extend3, create_time
+    </sql>
+
+</mapper>

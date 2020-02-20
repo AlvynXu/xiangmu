@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.AreaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Area">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="level" property="level"/>
+        <result column="parent_code" property="parentCode"/>
+        <result column="price" property="price"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, code, level, parent_code, price
+    </sql>
+    <select id="getProvinceStreetCount" resultType="com.guangxuan.dto.ProvinceStreetCountDTO">
+        SELECT p.code provinceCode,
+               count(s.id) streetCount,
+               p.name provinceName
+        FROM street s
+                 LEFT JOIN area d ON s.area_code = d.`code`
+                 LEFT JOIN area c ON c.code = d.parent_code
+                 LEFT JOIN area p ON p.code = c.parent_code
+        where d.level = 3
+          and c.level = 2
+          and p.level = 1
+        GROUP BY p.`code`
+    </select>
+
+</mapper>

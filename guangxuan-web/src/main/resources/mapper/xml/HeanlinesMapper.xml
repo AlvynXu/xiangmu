@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.HeadlinesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Headlines">
+        <id column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="sort" property="sort"/>
+        <result column="create_time" property="createTime"/>
+        <result column="price" property="price"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, item_id, sort, create_time, price
+    </sql>
+    <select id="getAdminPage" resultType="com.guangxuan.dto.domain.HeadlineDTO">
+        select hi.id,
+               hi.item_id  itemId,
+               h.area_code areaCode,
+               hi.status,
+               IFNULL(c.name, '全国'),
+               hi.days     totalDays,
+               h.sort,
+               h.price,
+               hi.end_time endTime,
+               hi.fee      fee
+        from headlines h
+                 inner join headline_item hi on h.id = hi.headline_id
+                 left join headline_item_area hia on hia.heandline_item_id
+                 left join area c on hia.area_code = c.code
+        where hia.area_code = #{areaCode}
+        GROUP BY hi.item_id
+    </select>
+    <select id="getAdminList" resultType="com.guangxuan.model.HeadlineItem">
+        select hi.*
+        from headline_item hi
+        left join headlines h on hi.headline_id = h.id
+        left join headline_item_area hia on hi.id = hia.heandline_item_id
+        where h.sort = #{sort}
+        <if test="status != null">
+            and hi.status =#{status}
+        </if>
+        and hia.area_code in
+        <foreach collection="areaCodes" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

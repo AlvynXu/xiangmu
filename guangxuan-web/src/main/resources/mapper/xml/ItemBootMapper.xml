@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.ItemBootMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.ItemBoot">
+        <id column="id" property="id" />
+        <result column="item_id" property="itemId" />
+        <result column="booth_id" property="boothId" />
+        <result column="enable" property="enable" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, item_id, booth_id, enable
+    </sql>
+
+</mapper>

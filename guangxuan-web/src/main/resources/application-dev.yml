@@ -1,0 +1,108 @@
+spring:
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 9992
+    password: passwd
+    lettuce:
+      pool:
+        max-active: 9
+        max-wait: -1
+        min-idle: 1
+        max-idle: 8
+  datasource:
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://127.0.0.1:9991/gx_dev?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: xxxx
+    password: xxxx
+    hikari:
+      connection-test-query: select 1
+      minimum-idle: 10
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: hikari-pool
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+  session:
+    timeout: 864000
+    store-type: redis
+    redis:
+      namespace: GUANGXUAN:SESSION
+system:
+  share-url: https://guangxuan.oss-cn-hangzhou.aliyuncs.com/3f7bead3-0586-4228-a41a-9d17c71a2aa7.apk
+  debug-off: true
+  sms-off: true
+  file-path: file
+  share-path: http://127.0.0.1:9000/api/mallItemInfo/getDetail
+  audit-off: true
+  pay-minutes: 2
+  market-days: 10
+  item-share: http://wlgx.hiyanjiao.com/assets/shareDetail.html
+  max-market-count: 100
+  not-allow-mall-item-same-booth: false
+  show-same-street-booth: true
+
+oss:
+  bucket-name: guangxuan
+  endpoint: http://oss-cn-hangzhou.aliyuncs.com
+  access-key-id: LTAISVigq4EdqDpL
+  access-key-secret: 6K2Vkst5UnyTdV292NbanSJ0QUspeI
+
+redisson:
+  address: redis://127.0.0.1:9992
+  password: passwd
+  timeout: 3000
+  connectionPoolSize: 64
+  #最小空闲连接数
+  connectionMinimumIdleSize: 10
+  database: 0
+server:
+  port: 9000
+
+
+alipay:
+  appId: xxx
+  privateKey: xxxx
+  publicKey: xxxx
+  serverUrl: https://openapi.alipaydev.com/gateway.do
+  domain: http://28n003772k.zicp.vip/api
+
+
+wxpay:
+  appId: xxx
+  appSecret: xxx
+  mchId: xxx
+  partnerKey: xxx
+  certPath: xxx
+  domain: xxx
+  isSandBox: xx
+
+
+
+file:
+  resource-path: file
+  server-url: http://192.168.5.6
+recharge:
+  min: 0.60
+  max: 5000
+  rate: 0.6
+
+#banner过期定时任务
+cron.bannerTimeSchedule: 0 * * * * ?
+#展位过期定时任务
+cron.boothTimeSchedule: 0 * * * * ?
+#头条过期定时任务
+cron.headlinesSchedule: 0 * * * * ?
+#付租金定时任�?
+cron.marketMoneySchedule: 0 * * * * ?
+#租用展位到期定时任务
+cron.marketRentSchedule: 0 * * * * ?
+#租用展位即将到期提醒定时任务
+cron.boothWarnSchedule: 0 * * * * ?
+#市场租用到期定时任务
+cron.marketSchedule: 0 * * * * ?
+#消息删除定时任务
+cron.messageSchedule: 0 * * * * ?

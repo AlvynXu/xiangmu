@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MallItemInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.MallItemInfo">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="status" property="status"/>
+        <result column="item_code" property="itemCode"/>
+        <result column="views" property="views"/>
+        <result column="create_time" property="createTime"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="has_report" property="hasReport"/>
+        <result column="report_status" property="reportStatus"/>
+        <result column="user_id" property="userId"/>
+        <result column="banner_path" property="bannerPath"/>
+        <result column="description" property="description"/>
+        <result column="province_code" property="provinceCode"/>
+        <result column="district_code" property="districtCode"/>
+        <result column="street_code" property="streetCode"/>
+        <result column="address_detail" property="addressDetail"/>
+        <result column="phone" property="phone"/>
+        <result column="share_count" property="shareCount"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, category_id, status, item_code, views, create_time, audit_time, publish_time, has_report, report_status
+    </sql>
+
+    <select id="getProvincePage" resultType="com.guangxuan.model.MallItemInfo">
+        select mii.*, p.name provinceName, c.name cityName, d.name districtName, s.name streetName
+        from area c
+                 left join area p on p.code = c.parent_code
+                 left join area d on c.code = d.parent_code
+                 left join street s on d.code = s.area_code
+                 left join booth b on s.id = b.street_id
+                 left join item_boot ib on b.id = ib.booth_id
+                 left join mall_item_info mii on ib.item_id = mii.id
+        where ib.enable = 1
+          and mii.status = #{status}
+          and mii.category_id = #{categoryId}
+          and p.code = #{areaCode}
+        GROUP BY mii.id, mii.views, mii.create_time
+        order by mii.views desc, mii.create_time
+    </select>
+
+    <select id="getCityPage" resultType="com.guangxuan.model.MallItemInfo">
+        select mii.*, p.name provinceName, c.name cityName, d.name districtName, s.name streetName
+        from area c
+                 left join area p on p.code = c.parent_code
+                 left join area d on c.code = d.parent_code
+                 left join street s on d.code = s.area_code
+                 left join booth b on s.id = b.street_id
+                 left join item_boot ib on b.id = ib.booth_id
+                 left join mall_item_info mii on ib.item_id = mii.id
+        where ib.enable = 1
+          and mii.status = #{status}
+          and mii.category_id = #{categoryId}
+          and c.code = #{areaCode}
+        GROUP BY mii.id, mii.views, mii.create_time
+        order by mii.views desc, mii.create_time
+    </select>
+    <select id="getDistrictPage" resultType="com.guangxuan.model.MallItemInfo">
+        select mii.*, p.name provinceName, c.name cityName, d.name districtName, s.name streetName
+        from area d
+                 left join area c on c.code = d.parent_code
+                 left join area p on p.code = c.parent_code
+                 left join street s on d.code = s.area_code
+                 left join booth b on s.id = b.street_id
+                 left join item_boot ib on b.id = ib.booth_id
+                 left join mall_item_info mii on ib.item_id = mii.id
+        where ib.enable = 1
+          and mii.status = #{status}
+          and mii.category_id = #{categoryId}
+          and d.code = #{areaCode}
+        GROUP BY mii.id, mii.views, mii.create_time
+        order by mii.views desc, mii.create_time desc
+    </select>
+    <select id="getStreetPage" resultType="com.guangxuan.model.MallItemInfo">
+        select mii.*, p.name provinceName, c.name cityName, d.name districtName, s.name streetName
+        from street s
+                 left join area d on d.code = s.area_code
+                 left join area c on c.code = d.parent_code
+                 left join area p on p.code = c.parent_code
+                 left join booth b on s.id = b.street_id
+                 left join item_boot ib on b.id = ib.booth_id
+                 left join mall_item_info mii on ib.item_id = mii.id
+        where ib.enable = 1
+          and mii.status = #{status}
+          and mii.category_id = #{categoryId}
+          and s.code = #{areaCode}
+        GROUP BY mii.id, mii.views, mii.create_time
+        order by mii.views desc, mii.create_time desc
+
+    </select>
+    <select id="getHeadlinesPage" resultType="com.guangxuan.model.MallItemInfo">
+        select mii.*
+        from headlines h
+                 left join headline_item hi on h.id = hi.headline_id
+                 left join mall_item_info mii on hi.item_id = mii.id
+                 left join headline_item_area hia on hia.heandline_item_id = hi.id
+        where hi.status = 1
+          and hia.area_code = #{areaCode}
+        GROUP BY mii.id,h.sort
+        order by h.sort
+    </select>
+    <select id="getCollectionPageList" resultType="com.guangxuan.model.MallItemInfo">
+        select mii.*
+        from mall_item_info mii
+                 left join item_collection ic on mii.id = ic.item_id
+        where ic.user_id = #{userId}
+        order by mii.create_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.StreetMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Street">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="price" property="price"/>
+        <result column="code" property="code"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, area_code, price,code,status
+    </sql>
+    <select id="getPage" resultType="com.guangxuan.dto.SoldInfoDTO">
+        select s.code code,s.name street,a1.name district,a2.name city
+        from street_partner_order st
+        left join street s on st.street_id = s.id
+        left join area a1 on a1.code = s.area_code
+        left join area a2 on a2.code = a1.parent_code
+        where st.user_id = #{userId}
+        <choose>
+            <when test="status !=null ">
+                and st.status = #{status}
+            </when>
+            <otherwise>
+                and st.status in (1,2)
+            </otherwise>
+        </choose>
+        order by st.create_time desc
+    </select>
+
+    <select id="getCityPage" resultMap="BaseResultMap">
+        select
+        s.id, s.name, s.area_code, s.price,s.code,s.status
+        from area c left join area d on c.code =d.parent_code
+        left join street s on d.code = s.area_code
+        where c.code = #{areaCode}
+        <if test=" type != null">
+            and s.status = #{type}
+        </if>
+
+    </select>
+    <select id="getDistrictPage" resultMap="BaseResultMap">
+        select
+        s.id, s.name, s.area_code, s.price,s.code,s.status
+        from area d
+        left join street s on d.code = s.area_code
+        where d.code = #{areaCode}
+        <if test=" type != null">
+            and s.status = #{type}
+        </if>
+    </select>
+
+    <select id="getStreetPage" resultMap="BaseResultMap">
+        select
+        s.id, s.name, s.area_code, s.price,s.code,s.status
+        from street s
+        where s.code = #{areaCode}
+        <if test=" type != null">
+            and s.status = #{type}
+        </if>
+    </select>
+
+    <select id="adminPageList" resultType="com.guangxuan.dto.domain.StreetDTO">
+        select s.id, s.name, gu.id userId, gu.phone,d.name district,c.name city,s.code code
+        from street s
+        left join street_partner_order sb on s.id = sb.street_id
+        left join guangxuan_users gu on gu.id = sb.user_id
+        left join area d on s.area_code = d.code
+        left join area c on d.parent_code = c.code
+        where s.area_code = #{areaCode}
+        <if test="name != null and name !=''">
+            and s.name like '%'#{name}'%'
+        </if>
+
+    </select>
+
+    <select id="getMarketStreet" resultType="com.guangxuan.dto.UserStreetDTO">
+        select c.name cityName, d.name districtName, s.name streetName, s.code streetCode
+        from market_order mo
+                 left join market m on mo.id = m.order_id
+                 left join street s on m.area_code = s.code
+                 left join area d on s.area_code = d.code
+                 left join area c on c.code = d.parent_code
+        where mo.id = #{orderId}
+          and mo.pay_status = 1
+          and m.status = 0
+        GROUP BY s.id
+    </select>
+    <select id="getCityStreet" resultType="com.guangxuan.model.Street">
+        select *
+        from street s
+                 left join area d on s.area_code = d.code
+                 left join area c on c.code = d.parent_code
+        where c.code = #{cityCode}
+    </select>
+
+</mapper>

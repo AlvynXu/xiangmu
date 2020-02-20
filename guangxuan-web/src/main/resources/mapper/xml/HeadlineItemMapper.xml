@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.HeadlineItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.HeadlineItem">
+        <id column="id" property="id" />
+        <result column="headline_id" property="headlineId" />
+        <result column="item_id" property="itemId" />
+        <result column="create_time" property="createTime" />
+        <result column="end_time" property="endTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, headline_id, item_id, create_time, end_time
+    </sql>
+
+</mapper>

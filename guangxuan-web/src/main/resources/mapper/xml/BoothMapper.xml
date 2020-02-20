@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.BoothMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Booth">
+        <id column="id" property="id"/>
+        <result column="booth_code" property="boothCode"/>
+        <result column="booth_name" property="boothName"/>
+        <result column="status" property="status"/>
+        <result column="price" property="price"/>
+        <result column="street_id" property="streetId"/>
+        <result column="is_saved" property="saved"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, booth_code, booth_name, status, price,street_id
+    </sql>
+    <update id="expire">
+        update booth
+        set status = 0
+        and use_status = 1
+        and is_saved = 0
+        where id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </update>
+
+    <select id="getPage" resultType="com.guangxuan.dto.SoldInfoDTO">
+        SELECT b.booth_code                                 CODE,
+               s.NAME                                       street,
+               a1.NAME                                      district,
+               a2.NAME                                      city,
+               bu.expire_time                               expireDate,
+               if(bu.user_id != #{userId}, 5, b.use_status) useStatus,
+               m.rent_end_time                              rentEndDate,
+               mii.id                                       itemId,
+               mii.description                              description,
+               m.type                                       type
+        FROM booth_users bu
+                 INNER JOIN booth b ON b.id = bu.booth_id
+                 LEFT JOIN market m ON m.booth_id = b.id
+                 LEFT JOIN item_boot ib ON ib.booth_id = b.id
+                 LEFT JOIN mall_item_info mii ON mii.id = ib.item_id
+                 LEFT JOIN street s ON b.street_id = s.id
+                 LEFT JOIN area a1 ON a1.CODE = s.area_code
+                 LEFT JOIN area a2 ON a2.CODE = a1.parent_code
+        where bu.status = #{status}
+          and (bu.user_id = #{userId} or m.user_id = #{userId})
+        ORDER BY useStatus desc
+    </select>
+    <select id="getCityPage" resultMap="BaseResultMap">
+        select
+        b.id, b.booth_code , b.booth_name , b.status , b.price , b.street_id,b.is_saved
+        from area c left join area d on c.code =d.parent_code
+        left join street s on d.code = s.area_code
+        left join booth b on s.id = b.street_id
+        where c.code = #{areaCode}
+        <if test=" type != null">
+            and b.status = #{type}
+        </if>
+        <if test=" isSaved != null">
+            and b.is_saved = #{isSaved}
+        </if>
+
+    </select>
+    <select id="getDistrictPage" resultMap="BaseResultMap">
+        select
+        b.id, b.booth_code , b.booth_name , b.status , b.price , b.street_id,b.is_saved
+        from area d
+        left join street s on d.code = s.area_code
+        left join booth b on s.id = b.street_id
+        where d.code = #{areaCode}
+        <if test=" type != null">
+            and b.status = #{type}
+        </if>
+        <if test=" isSaved != null">
+            and b.is_saved = #{isSaved}
+        </if>
+    </select>
+
+    <select id="getStreetPage" resultMap="BaseResultMap">
+        select
+        b.id, b.booth_code , b.booth_name , b.status , b.price , b.street_id,b.is_saved
+        from street s
+        left join booth b on s.id = b.street_id
+        where s.code = #{areaCode}
+        <if test=" type != null">
+            and b.status = #{type}
+        </if>
+        <if test=" isSaved != null">
+            and b.is_saved = #{isSaved}
+        </if>
+    </select>
+
+
+    <select id="getAdminBoothPage" resultType="com.guangxuan.dto.domain.BoothDTO">
+        select b.id ,b.booth_code code,s.name street,d.name district,c.name city,gu.phone,gu2.phone
+        marketUserPhone,bu.expire_time endTime,
+        gu2.phone marketRentUserPhone,m.rent_end_time marketEndTime,m.type rentType,b.use_status useStatus,m.days
+        rentTotalDate
+        from booth b
+        left join street s on s.id = b.street_id
+        left join area d on s.area_code = d.code
+        left join area c on c.code = d.parent_code
+        left join market m on b.id = m.booth_id
+        left join booth_users bu on b.id = bu.booth_id
+        left join guangxuan_users gu on bu.user_id = gu.id
+        left join guangxuan_users gu1 on m.rent_user_id = gu1.id
+        left join guangxuan_users gu2 on m.user_id = gu2.id
+        where 1=1
+        <if test="boothCode !=null and boothCode != ''">
+            and b.booth_code = #{boothCode}
+        </if>
+        <if test="streetCode !=null and streetCode != ''">
+            and s.code = #{streetCode}
+        </if>
+        group by b.id
+    </select>
+
+    <select id="getItemCanUsePage" resultType="com.guangxuan.dto.ItemCanUseBoothDTO">
+        select b.id,b.booth_code code,c.name city,d.name district,s.name street,bu.expire_time expireEndTime
+        from booth b
+        left join booth_users bu on bu.booth_id = b.id
+        left join item_boot ib on b.id = ib.booth_id
+        left join street s on b.street_id = s.id
+        left join area d on s.area_code = d.code
+        left join area c on d.parent_code = c.code
+        where ib.id is null and bu.status = 1 and b.use_status in
+        <foreach collection="status" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="boothIds != null and boothIds.size() > 0 ">
+            and b.id in
+            <foreach collection="boothIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="saveStreetIds != null and saveStreetIds.size() > 0 ">
+            and b.street_id not in
+            <foreach collection="saveStreetIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="!showSameStreetBooth">
+            group by b.street_id
+        </if>
+
+    </select>
+    <select id="getCanRentBooth" resultType="com.guangxuan.dto.SoldInfoDTO">
+        select b.id ,s.code streetCode
+        from booth_users bu
+        left join booth b on bu.booth_id = b.id
+        left join street s on b.street_id = s.id
+        where bu.status = 1
+        and bu.user_id = #{userId}
+        and b.use_status = 1
+        and s.code in
+        <foreach collection="streetCodes" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getBoothDetail" resultType="com.guangxuan.dto.BoothDetailDTO">
+        select b.id,b.booth_code code,c.name city,d.name district,s.name street,bu.user_id userId,bu.expire_time
+        expireTime
+        from booth b
+        left join booth_users bu on bu.booth_id = b.id
+        left join street s on b.street_id = s.id
+        left join area d on s.area_code = d.code
+        left join area c on d.parent_code = c.code
+        where b.id in
+        <foreach collection="boothIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

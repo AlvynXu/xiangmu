@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.SystemConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.SystemConfig">
+        <id column="id" property="id" />
+        <result column="recharge_max" property="rechargeMax" />
+        <result column="recharge_min" property="rechargeMin" />
+        <result column="recharge_rate" property="rechargeRate" />
+        <result column="rent_rate" property="rentRate" />
+        <result column="seek_rent_rate" property="seekRentRate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, recharge_max, recharge_min, recharge_rate, rent_rate, seek_rent_rate
+    </sql>
+
+</mapper>

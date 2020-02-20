@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.CommissionLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.CommissionLog">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="from_user_id" property="fromUserId" />
+        <result column="amount" property="amount" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="rate" property="rate" />
+        <result column="create_time" property="createTime" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, from_user_id, amount, total_amount, rate, create_time, type
+    </sql>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MallConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.MallConfig">
+        <id column="id" property="id" />
+        <result column="egg_unit_price" property="eggUnitPrice" />
+        <result column="threshold0" property="threshold0" />
+        <result column="threshold1" property="threshold1" />
+        <result column="threshold2" property="threshold2" />
+        <result column="threshold3" property="threshold3" />
+        <result column="threshold4" property="threshold4" />
+        <result column="threshold5" property="threshold5" />
+        <result column="direct_rate0" property="directRate0" />
+        <result column="direct_rate1" property="directRate1" />
+        <result column="direct_rate2" property="directRate2" />
+        <result column="direct_rate3" property="directRate3" />
+        <result column="direct_rate4" property="directRate4" />
+        <result column="direct_rate5" property="directRate5" />
+        <result column="global_rate1" property="globalRate1" />
+        <result column="global_rate2" property="globalRate2" />
+        <result column="global_rate3" property="globalRate3" />
+        <result column="global_rate4" property="globalRate4" />
+        <result column="global_rate5" property="globalRate5" />
+        <result column="village_price" property="villagePrice" />
+        <result column="street_price" property="streetPrice" />
+        <result column="city_price" property="cityPrice" />
+        <result column="purchase_street_threshold" property="purchaseStreetThreshold" />
+        <result column="purchase_street_max_number" property="purchaseStreetMaxNumber" />
+        <result column="purchase_village_threshold" property="purchaseVillageThreshold" />
+        <result column="purchase_village_max_number" property="purchaseVillageMaxNumber" />
+        <result column="purchase_street_configs" property="purchaseStreetConfigs" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, egg_unit_price, threshold0, threshold1, threshold2, threshold3, threshold4, threshold5, direct_rate0, direct_rate1, direct_rate2, direct_rate3, direct_rate4, direct_rate5, global_rate1, global_rate2, global_rate3, global_rate4, global_rate5, village_price, street_price, city_price, purchase_street_threshold, purchase_street_max_number, purchase_village_threshold, purchase_village_max_number, purchase_street_configs
+    </sql>
+
+</mapper>

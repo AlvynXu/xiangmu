@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MallBannerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.MallBanner">
+        <id column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="visible" property="visible"/>
+        <result column="sort" property="sort"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, item_id, image_url, visible, sort, create_time
+    </sql>
+    <select id="getBannerList" resultType="com.guangxuan.model.MallBanner">
+        select mb.*
+        from mall_banner mb
+        left join banner_area ba on mb.id = ba.banner_id
+        where mb.visible = true and ba.area_code in
+        <foreach collection="areaCodes" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="categoryId != null">
+            and mb.category_id=#{categoryId}
+        </if>
+        order by mb.sort desc
+    </select>
+    <select id="getAdminBannerPageList" resultType="com.guangxuan.model.MallBanner">
+        select mb.*
+        from mall_banner mb
+        left join banner_area ba on mb.id = ba.banner_id
+        where ba.area_code in
+        <foreach collection="areaCodes" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <select id="listInfo" resultType="com.guangxuan.model.MallBanner">
+        select mb.*
+        from mall_banner mb
+        left join banner_area ba on mb.id = ba.banner_id
+        where mb.item_id =#{itemId}
+        and ba.area_code in
+        <foreach collection="areaCodes" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

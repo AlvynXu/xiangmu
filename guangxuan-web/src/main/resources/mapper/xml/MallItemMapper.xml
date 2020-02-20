@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MallItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.MallItem">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="status" property="status"/>
+        <result column="total_money" property="totalMoney"/>
+        <result column="days" property="days"/>
+        <result column="target_money" property="targetMoney"/>
+        <result column="head_pics" property="headPics"/>
+        <result column="area_code" property="areaCode"/>
+        <result column="district_code" property="districtCode"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="title" property="title"/>
+        <result column="tag_price" property="tagPrice"/>
+        <result column="price" property="price"/>
+        <result column="extra_price" property="extraPrice"/>
+        <result column="inventory" property="inventory"/>
+        <result column="sales" property="sales"/>
+        <result column="views" property="views"/>
+        <result column="desc_info" property="descInfo"/>
+        <result column="desc_pics" property="descPics"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, category_id, status, total_money, days, target_money, head_pics, area_code, district_code, detail_address, title, tag_price, price, extra_price, inventory, sales, views, desc_info, desc_pics, create_time
+    </sql>
+    <select id="getItems" resultType="com.guangxuan.model.MallItem">
+        select *
+        from mall_item mi
+                 left join mall_order_item moi on mi.id = moi.item_id
+                 left join mall_order mo on moi.order_id = mo.order_id
+
+    </select>
+
+</mapper>

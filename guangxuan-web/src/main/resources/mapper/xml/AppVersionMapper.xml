@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.AppVersionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.AppVersion">
+        <id column="id" property="id" />
+        <result column="app_version" property="appVersion" />
+        <result column="download_pth" property="downloadPth" />
+        <result column="description" property="description" />
+        <result column="type" property="type" />
+        <result column="enable" property="enable" />
+        <result column="time" property="time" />
+        <result column="ext_1" property="ext1" />
+        <result column="ext_2" property="ext2" />
+        <result column="ext_3" property="ext3" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, app_version, download_pth, description, type, enable, time, ext_1, ext_2, ext_3
+    </sql>
+
+</mapper>

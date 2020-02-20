@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.MemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Member">
+        <id column="id" property="id" />
+        <result column="nickname" property="nickname" />
+        <result column="avatar_url" property="avatarUrl" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="from_user_id" property="fromUserId" />
+        <result column="invite_code" property="inviteCode" />
+        <result column="openid" property="openid" />
+        <result column="pay_openid" property="payOpenid" />
+        <result column="unionid" property="unionid" />
+        <result column="money" property="money" />
+        <result column="pay_money" property="payMoney" />
+        <result column="virtual_money" property="virtualMoney" />
+        <result column="friend_count" property="friendCount" />
+        <result column="team_count" property="teamCount" />
+        <result column="village_count" property="villageCount" />
+        <result column="street_count" property="streetCount" />
+        <result column="egg_count" property="eggCount" />
+        <result column="buy_egg_count" property="buyEggCount" />
+        <result column="speed" property="speed" />
+        <result column="all_speed" property="allSpeed" />
+        <result column="one_second_egg_count" property="oneSecondEggCount" />
+        <result column="speed_card_count" property="speedCardCount" />
+        <result column="chicken_count" property="chickenCount" />
+        <result column="level" property="level" />
+        <result column="real_name" property="realName" />
+        <result column="alipay_account" property="alipayAccount" />
+        <result column="is_violation" property="isViolation" />
+        <result column="is_tester" property="isTester" />
+        <result column="create_time" property="createTime" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="not_login_status" property="notLoginStatus" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, nickname, avatar_url, phone_number, from_user_id, invite_code, openid, pay_openid, unionid, money, pay_money, virtual_money, friend_count, team_count, village_count, street_count, egg_count, buy_egg_count, speed, all_speed, one_second_egg_count, speed_card_count, chicken_count, level, real_name, alipay_account, is_violation, is_tester, create_time, last_login_time, not_login_status, version
+    </sql>
+
+</mapper>

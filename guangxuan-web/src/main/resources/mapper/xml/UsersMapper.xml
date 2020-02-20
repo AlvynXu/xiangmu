@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guangxuan.mapper.UsersMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.guangxuan.model.Users">
+        <id column="id" property="id"/>
+        <result column="phone" property="phone"/>
+        <result column="password" property="password"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="deleted"/>
+        <result column="promoter_id" property="promoterId"/>
+        <result column="reg_code" property="regCode"/>
+        <result column="level" property="level"/>
+        <result column="profit" property="profit"/>
+        <result column="balance" property="balance"/>
+        <result column="is_vip" property="isVip"/>
+        <result column="team_profit" property="teamProfit"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, phone, password, create_time, update_time, is_deleted, promoter_id, reg_code, level, profit, balance, is_vip, team_profit
+    </sql>
+
+    <select id="getPage" resultType="com.guangxuan.dto.domain.UserDTO">
+        select u.id,
+        u.phone,
+        u.create_time registerDate,
+        u.reg_code regCode,
+        u.level,
+        u.balance,
+        u.is_deleted enabled,
+        u.is_deleted deleted
+        from guangxuan_users u
+        where 1=1
+        <if test="phone !=null and phone != ''">
+            and u.phone like '%' #{phone} '%'
+        </if>
+        <if test="level !=null">
+            and u.level = #{level}
+        </if>
+    </select>
+
+</mapper>
