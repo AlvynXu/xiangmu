@@ -27,7 +27,7 @@
         <junit.version>4.12</junit.version>
         <fastjson.version>1.2.62</fastjson.version>
         <guava.version>23.0</guava.version>
-        <shiro.version>1.4.2</shiro.version>
+        <shiro.version>1.7.0</shiro.version>
         <jwt.version>3.8.3</jwt.version>
         <redisson.version>3.11.5</redisson.version>
         <IJpay.version>2.3.2</IJpay.version>
